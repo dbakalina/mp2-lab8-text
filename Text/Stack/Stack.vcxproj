@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{ef8908de-dea5-4b6f-9139-a21e8210bbea}</ProjectGuid>
-    <RootNamespace>Text</RootNamespace>
+    <ProjectGuid>{231eb559-421f-43fd-93d2-e6b157a0a820}</ProjectGuid>
+    <RootNamespace>Stack</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,12 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Text.cpp" />
-    <ClCompile Include="Text_List.cpp" />
+    <ClCompile Include="Calculator.cpp" />
+    <ClCompile Include="Stack.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Stack\Stack.h" />
-    <ClInclude Include="Text.h" />
+    <ClInclude Include="Calculator.h" />
+    <ClInclude Include="Stack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

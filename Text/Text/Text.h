@@ -2,12 +2,16 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "../Stack/Stack.h"
+using namespace std;
+
+const int MAX_SIZE = 80;
 
 class TTextLink
 {
-	TTextLink* pNext, * pDown;
+protected:
+	TTextLink *pNext, *pDown;
 	char str[80];
-	int level;
 public:
 	TTextLink(char* s = NULL , TTextLink* pN = NULL, TTextLink* pD = NULL)
 	{
@@ -20,13 +24,19 @@ public:
 
 	}
 	~TTextLink();
+	
+	friend class TText;
 };
 	
 class TText
 {
-	TTextLink* pFirst, * pCurr;
-	TStack <TTextLink> st;
+	TTextLink* pFirst, *pCurr;
+	Stack <TTextLink*> st;
+	int level;
 public:
+	TText(TTextLink* pf = NULL);
+	~TText();
+
 	void GoFirst();
 	void ToDown();
 	void ToPrev();
@@ -36,10 +46,18 @@ public:
 	void InsDownLine(char* s);
 	void InsDownSection(char* s);
 	void DelNextLine();
-	void PrintRec();
+	void DelDownLine();
+	void ToStart();
+	void PrintRec(TTextLink* t);
 	void Print();
 	void SaveRec(TTextLink *t,ofstream& ofs);
 	void Save(char* fn);
 	TTextLink* ReadRec(ifstream& ifs);
 	void Read(char* fn);
+	TTextLink* GetCurrent() { return pCurr; };
+	int IsEnd();
+
+	void GoNext();
+
+	void Reset();
 };

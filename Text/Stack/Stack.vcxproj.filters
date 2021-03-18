@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Text.cpp">
+    <ClCompile Include="Stack.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Text_List.cpp">
-      <Filter>Файлы ресурсов</Filter>
+    <ClCompile Include="Calculator.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Text.h">
+    <ClInclude Include="Stack.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\Stack\Stack.h">
+    <ClInclude Include="Calculator.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
