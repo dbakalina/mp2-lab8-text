@@ -34,30 +34,44 @@ class TText
 	Stack <TTextLink*> st;
 	int level;
 public:
-	TText(TTextLink* pf = NULL);
-	~TText();
+	TText(TTextLink* pf = NULL)
+	{
+		if (!pf) pf = new TTextLink;
+
+		pFirst = pf;
+		pCurr = pFirst;
+	}
+	~TText() {};
 
 	void GoFirst();
 	void ToDown();
 	void ToPrev();
 	void ToFirst();
+	void ToStart();
+
+	//Вставка
 	void InsNextLine(char* s);
 	void InsNextSection(char* s);
 	void InsDownLine(char* s);
 	void InsDownSection(char* s);
+
+	//Удаление
 	void DelNextLine();
 	void DelDownLine();
-	void ToStart();
+	
+	//Печать,сохранение,чтение
 	void PrintRec(TTextLink* t);
 	void Print();
 	void SaveRec(TTextLink *t,ofstream& ofs);
 	void Save(char* fn);
 	TTextLink* ReadRec(ifstream& ifs);
 	void Read(char* fn);
+
+
 	TTextLink* GetCurrent() { return pCurr; };
 	int IsEnd();
-
 	void GoNext();
-
 	void Reset();
+	void PointerCreate();
+	void PointerDelete();
 };
