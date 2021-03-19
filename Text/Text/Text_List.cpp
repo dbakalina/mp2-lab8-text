@@ -22,12 +22,6 @@ void TText::ToDown()
 	}
 }
 
-void TText :: ToPrev()
-{
-	if (!st.Empty())
-		pCurr = st.Pop();
-}
-
 void TText::ToPrev()
 {
 	if (!st.Empty())
@@ -114,15 +108,15 @@ void TText::PrintRec(TTextLink* t)
 			cout << " ";
 
 		cout << " " << t->str << endl;
-		level++;
+
 		if (t->pDown != NULL)
 		{
-			level--;
+			level++;
 			PrintRec(t->pDown);
 		}
 		if (t->pNext != NULL)
 		{
-			//TextLevel--;
+			level--;
 			PrintRec(t->pNext);
 		}
 	}
@@ -203,4 +197,54 @@ TTextLink* TText:: ReadRec(ifstream& ifs)
 	}
 
 	return pF;
+}
+
+int TText::IsEnd()
+{
+	return st.Empty();
+}
+
+void TText::GoNext()
+{
+	if (!IsEnd())
+	{
+		pCurr = st.Pop();
+
+		if (pCurr != pFirst)
+		{
+			if (pCurr->pNext != NULL) st.Push(pCurr->pNext);
+			if (pCurr->pDown != NULL) st.Push(pCurr->pDown);
+		}
+	}
+}
+
+void TText::Reset()
+{
+	st.Clear();
+	pCurr = pFirst;
+	if (pCurr != NULL)
+	{
+		st.Push(pCurr);
+
+		if (pCurr->pNext != NULL) st.Push(pCurr->pNext);
+		if (pCurr->pDown != NULL) st.Push(pCurr->pDown);
+	}
+}
+
+void TText::PointerCreate()
+{
+	if (pCurr != NULL)
+	{
+		char Point[80] = "->";
+		strcat_s(Point, pCurr->str);
+		strcpy_s(pCurr->str, Point);
+	}
+}
+
+void TText::PointerDelete()
+{
+	if (pCurr != NULL && strstr(pCurr->str, "->") != NULL)
+	{
+		strcpy(pCurr->str, pCurr->str + 2);
+	}
 }

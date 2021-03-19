@@ -1,4 +1,5 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -18,12 +19,14 @@ public:
 		pNext = pN;
 		pDown = pD;
 		if (s)
+		{
 			strcpy(str, s);
+		}
 		else
 			str[0] = '\n';
 
 	}
-	~TTextLink();
+	~TTextLink(){}
 	
 	friend class TText;
 };
