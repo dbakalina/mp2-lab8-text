@@ -106,19 +106,11 @@ void TText::PrintRec(TTextLink* t)
 	{
 		for (int i = 0; i < level; i++)
 			cout << " ";
-
-		cout << " " << t->str << endl;
-
-		if (t->pDown != NULL)
-		{
+		std::cout << t->str << endl;
 			level++;
 			PrintRec(t->pDown);
-		}
-		if (t->pNext != NULL)
-		{
 			level--;
 			PrintRec(t->pNext);
-		}
 	}
 }
 
@@ -153,11 +145,7 @@ void TText:: Read(char* fn)
 {
 	ifstream ifs(fn);
 	pFirst = ReadRec(ifs);
-
-	TTextLink* tmp = pFirst;
-	pFirst = pFirst->pNext;
-	pCurr = pFirst;
-	delete tmp;
+	ifs.close();
 }
 
 TTextLink* TText:: ReadRec(ifstream& ifs)
@@ -165,7 +153,6 @@ TTextLink* TText:: ReadRec(ifstream& ifs)
 
 	TTextLink* pF = NULL, *pC = NULL;
 	char Buff[80];
-	pF = pC = new TTextLink();
 
 	while (ifs.eof() == 0)
 	{
@@ -178,24 +165,22 @@ TTextLink* TText:: ReadRec(ifstream& ifs)
 		else
 			if (Buff[0] == '{')
 			{
-				TTextLink* tmp = ReadRec(ifs);
-				pC->pDown = tmp->pNext;
-				delete tmp;
+				pC->pDown = ReadRec(ifs);
 			}
 			else
 			{
-				pC->pNext = new TTextLink(Buff);
-				pC = pC->pNext;
+				if (pF)
+				{
+					pC->pNext = new TTextLink(Buff);
+					pC = pC->pNext;
+				}
+				else {
+					pF = new TTextLink(Buff);
+					pC = pF;
+				}
+
 			}
 	}
-
-	pC = pF;
-	if (pF->pDown != NULL)
-	{
-		pF = pF->pNext;
-		delete pC;
-	}
-
 	return pF;
 }
 
