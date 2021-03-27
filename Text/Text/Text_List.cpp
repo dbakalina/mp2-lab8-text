@@ -248,9 +248,10 @@ void TTextLink::operator delete(void* pM)
 	pLink->pNext = mem.pFree;
 	mem.pFree = pLink;
 }
-/*void TTextLink::Cleaner(TText &t)
-{
 
+void TTextLink::Cleaner(TText &t)
+{
+	TTextLink* tmp = mem.pFirst;
 	for (t.Reset(); !t.IsEnd(); t.GoNext())
 	{
 		char Marker[80] = "&&&";
@@ -265,7 +266,7 @@ void TTextLink::operator delete(void* pM)
 			strcpy(pLink->str, pLink->str + 3);
 		else
 			delete pLink;
-}*/
+}
 
 void TTextLink::InitMem(int size)
 {
