@@ -233,3 +233,54 @@ void TText::PointerDelete()
 		strcpy(pCurr->str, pCurr->str + 2);
 	}
 }
+
+void* TTextLink::operator new(size_t size)
+{
+	TTextLink* pLink = mem.pFree;
+	if (mem.pFree != NULL)
+		mem.pFree = pLink->pNext;
+	return pLink;
+}
+
+void TTextLink::operator delete(void* pM)
+{
+	TTextLink* pLink = (TTextLink*)pM;
+	pLink->pNext = mem.pFree;
+	mem.pFree = pLink;
+}
+/*void TTextLink::Cleaner(TText &t)
+{
+
+	for (t.Reset(); !t.IsEnd(); t.GoNext())
+	{
+		char Marker[80] = "&&&";
+		strcat(Marker, t.GetCurrent()->str);
+		strcpy(txt.GetCurrent()->str, Marker);
+	}
+	TTextLink* pLink;
+	for (pLink = mem.pFree; pLink != NULL; pLink = pLink->pNext)
+		strcpy(pLink->str, "&&&");
+	for (pLink = mem.pFirst; pLink <= mem.pLast; pLink++)
+		if (strstr(pLink->str, "&&&") != NULL)
+			strcpy(pLink->str, pLink->str + 3);
+		else
+			delete pLink;
+}*/
+
+void TTextLink::InitMem(int size)
+{
+	int Size = sizeof(TTextLink) * size;
+	mem.pFree = mem.pFirst  =(TTextLink*)malloc(Size);
+	mem.pLast = mem.pFirst + (size - 1);
+	TTextLink* tmp = mem.pFirst;
+	while(tmp != mem.pLast)
+	{
+		tmp->flag = false;
+		tmp->pNext = tmp + 1;
+		tmp = tmp->pNext;
+		tmp->str[0] = '\0';
+
+	}
+	tmp->pNext = NULL;
+	tmp->flag = false;
+}
