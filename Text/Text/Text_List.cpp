@@ -256,7 +256,7 @@ void TTextLink::Cleaner(TText &t)
 	{
 		char Marker[80] = "&&&";
 		strcat(Marker, t.GetCurrent()->str);
-		strcpy(txt.GetCurrent()->str, Marker);
+		strcpy(t.GetCurrent()->str, Marker);
 	}
 	TTextLink* pLink;
 	for (pLink = mem.pFree; pLink != NULL; pLink = pLink->pNext)

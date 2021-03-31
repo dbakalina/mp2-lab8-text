@@ -8,6 +8,9 @@ using namespace std;
 
 const int MAX_SIZE = 80;
 
+class TTextLink;
+class TText;
+
 struct TMem {
 	TTextLink* pFirst, * pLast, * pFree;
 };
@@ -18,6 +21,7 @@ protected:
 	TTextLink *pNext, *pDown;
 	char str[80];
 	bool flag;
+	static TMem mem;
 public:
 	TTextLink(char* s = NULL , TTextLink* pN = NULL, TTextLink* pD = NULL)
 	{
@@ -33,7 +37,6 @@ public:
 	}
 	~TTextLink(){}
 
-	static TMem mem;
 	static void InitMem(int size);
 	static void Cleaner(TText &t);
 	static void PrintFree();

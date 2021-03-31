@@ -5,10 +5,13 @@
 
 using namespace std;
 
+TMem TTextLink::mem;
+
 int main()
 {
 	setlocale(LC_CTYPE, "Russian");
     
+	TTextLink::InitMem(1000);
 	TText t;
 	char NameofFile[80], s[80];
 	cout << "Введите название файла для чтения" << endl;
