@@ -1,17 +1,21 @@
-line 1
+Part1
 {
-line 1.1
+Chapter1
 {
-str 1
-str 2
+Chapter1.1
+Chapter1.2
+Chapter1.3
 }
-line 1.2
+Chapter2
 {
-str 1
-str2
+Chapter2.1
+Chapter2.2
+Chapter2.3
 }
 }
-line 2
+Part3
+Part4
 {
+Chapter5
+Chapter6
 }
-

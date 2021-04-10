@@ -1,96 +1,124 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 #include <string>
-#include <iostream>
+//#include <iostream>
 #include <fstream>
 #include "../Stack/Stack.h"
+#include<stdio.h>
+#include<algorithm>
+#include<set>
+
 using namespace std;
 
 const int MAX_SIZE = 80;
+const int MaxMemorySize = 100;
 
-class TTextLink;
+
+struct  TTextLink;
 class TText;
-
-struct TMem {
-	TTextLink* pFirst, * pLast, * pFree;
+struct  TMem
+{
+	TTextLink* pFirst, * pFree, * pLast;
 };
 
-class TTextLink
-{
-protected:
-	TTextLink *pNext, *pDown;
-	char str[80];
+struct TTextLink {
+	TTextLink* pNext;
+	TTextLink* pDown;
+	char str[MAX_SIZE];
 	bool flag;
 	static TMem mem;
-public:
-	TTextLink(char* s = NULL , TTextLink* pN = NULL, TTextLink* pD = NULL)
-	{
-		pNext = pN;
-		pDown = pD;
-		if (s)
-		{
-			strcpy(str, s);
-		}
-		else
-			str[0] = '\n';
-
-	}
-	~TTextLink(){}
-
-	static void InitMem(int size);
-	static void Cleaner(TText &t);
+	static void InitMem(int size = MaxMemorySize);
+	static void clean(TText& t);
 	static void PrintFree();
-	
-	void* operator new(size_t size);
-	void operator delete(void* p);
-
-	friend class TText;
+	//конструктор
+	TTextLink(const char* s = NULL, TTextLink* next = NULL, TTextLink* down = NULL);
 };
-	
-class TText
+
+class TText : private TTextLink
 {
-	TTextLink* pFirst, *pCurr;
+	TTextLink* pFirst;
+	TTextLink* pCurr;
 	Stack <TTextLink*> st;
-	int level;
+	//рекурсивна€ печать. ¬нутренн€€ функци€ 
+	void PrintRec(TTextLink* t, int level);
+	//рекурсивный вывод в файл. ¬нутренн€€ функци€
+	void SaveRec(TTextLink* t, std::ofstream& ofs);
+	//рекурсивное чтение из файла. ¬нутренн€€ функци€
+	TTextLink* ReadRec(std::ifstream& ifs);
 public:
-	TText(TTextLink* pf = NULL)
-	{
-		if (!pf) pf = new TTextLink;
-
-		pFirst = pf;
-		pCurr = pFirst;
-	}
-	~TText() {};
-
-	void GoFirst();
-	void ToDown();
-	void ToPrev();
-	void ToFirst();
-	void ToStart();
-
-	//¬ставка
-	void InsNextLine(char* s);
-	void InsNextSection(char* s);
-	void InsDownLine(char* s);
-	void InsDownSection(char* s);
-
-	//”даление
+	//конструктор по умолчанию
+	TText();
+	//конструктор копировани€
+	//TText(const TText& t);
+	//переместить указатель на текущий на первый элемент и очистить стек
+	void GoFirstLink();
+	//перейти к следующему элементу по иерархии после текущего
+	void GoNextLink();
+	//перейти к нижнему (вложенному) элементу по иерархии после текущего
+	void GoDownLink();
+	//вернутьс€ к предыдущему элементу
+	void GoPrevLink();
+	//добавить следующий по иерархии элемент и присоединить к нему pNext текущего как pNext
+	void InsNextLine(const char* s);
+	//добавить следующий по иерархии элемент и присоединить к нему pNext текущего как pDown
+	void InsNextSections(const char* s);
+	//добавить вложенный по иерархии элемент и присоединить к нему pDown текущего как pNext
+	void InsDownLine(const char* s);
+	//добавить вложенный по иерархии элемент и присоединить к нему pDown текущего как pDown 
+	void InsDownSections(const char* s);
+	//удалить у текущего следующую по иерархии секцию
 	void DelNextLine();
+	//удалить у текущего вложенную по иерархии секцию
 	void DelDownLine();
-	
-	//ѕечать,сохранение,чтение
-	void PrintRec(TTextLink* t);
+	//печать на экран (через вызов рекурсивной печати). ¬нешн€€ функци€
 	void Print();
-	void SaveRec(TTextLink *t,ofstream& ofs);
-	void Save(char* fn);
-	TTextLink* ReadRec(ifstream& ifs);
-	void Read(char* fn);
-
-
-	TTextLink* GetCurrent() { return pCurr; };
-	int IsEnd();
-	void GoNext();
+	//вывод в файл (через вызов рекурсивного вывода). ¬нешн€€ функци€ 
+	void Save(const char* file_name);
+	//чтение из файла (через вызов рекурсивоного чтени€). ¬нешн€€ функци€ 
+	void Read(const char* file_name);
+	//печать на экран с помощю стека
+	void PrintS();
+	//сохранение в файл с помощью стека
+	void SaveS(const char* file_name);
+	//чтение из файла с помощью стека
+	void ReadS(const char* file_name);
+	//навигаци€ по тексту 
 	void Reset();
+	void GoNext();
+	bool IsEmpty();
+	TTextLink* GetCurr() { return pCurr; }
+	//переопределение операторов работы с пам€тью
+	void* operator new(std::size_t n);
+	void operator delete (void* memory);
 	void PointerCreate();
 	void PointerDelete();
+	void ToNext()
+	{
+		if (pCurr->pNext)
+		{
+			st.Push(pCurr);
+			pCurr = pCurr->pNext;
+		}
+	}
+
+	void ToDown()
+	{
+		if (pCurr->pDown)
+		{
+			st.Push(pCurr);
+			pCurr = pCurr->pDown;
+		}
+	}
+
+	void ToPrev()
+	{
+		if (!st.Empty())
+			pCurr = st.Pop();
+	}
+
+	void ToFirst()
+	{
+		pCurr = pFirst;
+		st.Clear();
+	}
 };
